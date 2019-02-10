@@ -35,7 +35,7 @@ newLightEnv mdf = do
 #else
      initStaticOpts
 #endif
-     settings <- initSysTools (Just libdir)
+     settings <- initSysTools libdir
 #if __GLASGOW_HASKELL__ >= 806
      let llvmTgtList = ([],[]) -- TODO: where should this come from?
      initDynFlags $ defaultDynFlags settings llvmTgtList

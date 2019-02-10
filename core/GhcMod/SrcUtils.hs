@@ -40,7 +40,7 @@ instance HasType (LHsExpr GhcTc) where
         mbe <- liftIO $ Gap.deSugar tcm e hs_env
         return $ (G.getLoc e, ) <$> CoreUtils.exprType <$> mbe
 
-instance HasType (LPat GhcTc) where
+instance HasType (Located (G.Pat GhcTc)) where
     getType _ (G.L spn pat) = return $ Just (spn, hsPatType pat)
 
 ----------------------------------------------------------------
@@ -77,7 +77,7 @@ collectSpansTypes' withConstraints tcs f =
     ((return [],)
       `mkQ`  (hsBind    :: G.LHsBind GhcTc -> CstGenQS -> (m [(SrcSpan, Type)], CstGenQS)) -- matches on binds
       `extQ` (genericCT :: G.LHsExpr GhcTc -> CstGenQS -> (m [(SrcSpan, Type)], CstGenQS)) -- matches on expressions
-      `extQ` (genericCT :: G.LPat    GhcTc -> CstGenQS -> (m [(SrcSpan, Type)], CstGenQS)) -- matches on patterns
+      `extQ` (genericCT :: Located (G.Pat GhcTc) -> CstGenQS -> (m [(SrcSpan, Type)], CstGenQS)) -- matches on patterns
 
       )
     (G.tm_typechecked_source tcs)

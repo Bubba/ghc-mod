@@ -172,16 +172,7 @@ extractBindings (Just inf) mdl = M.fromList $ do
   return (sym, mdls)
 
 mkFastStringByteString' :: BS.ByteString -> FastString
-#if !MIN_VERSION_ghc(7,8,0)
-fastStringToByteString :: FastString -> BS.ByteString
-fastStringToByteString = BS.pack . bytesFS
-
 mkFastStringByteString' = mkFastStringByteList . BS.unpack
-#elif __GLASGOW_HASKELL__ == 708
-mkFastStringByteString' = unsafePerformIO . mkFastStringByteString
-#else
-mkFastStringByteString' = mkFastStringByteString
-#endif
 
 ----------------------------------------------------------------
 

@@ -17,13 +17,14 @@
 {-# LANGUAGE CPP, TemplateHaskell #-}
 {-# LANGUAGE StandaloneDeriving #-}
 {-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE PackageImports #-}
 module GhcMod.DynFlagsTH where
 
-import Language.Haskell.TH
-import Language.Haskell.TH.Syntax
+import "template-haskell" Language.Haskell.TH
+import "template-haskell" Language.Haskell.TH.Syntax
 import Control.Applicative
 #if __GLASGOW_HASKELL__ >= 804
-import GHC.LanguageExtensions
+import GHC.LanguageExtensions as LE
 import qualified EnumSet as E
 import qualified Data.Set as IS
 #else
@@ -94,6 +95,8 @@ deriveEqDynFlags qds = do
            , "OverridingBool" -- added for ghc-8.2
            , "Scheme"         -- added for ghc-8.2
            , "LoadedPlugin"   -- added for ghc-8.6
+           , "StaticPlugin"   -- added for ghc-lib
+           , "CfgWeights"     -- added for ghc-lib
            ]
        ignoredTypeOccNames = [ "OnOff" ]
 
@@ -216,6 +219,6 @@ deriving instance Ord GeneralFlag
 deriving instance Ord DynFlags.WarningFlag
 deriving instance Ord DynFlags.DumpFlag
 deriving instance Ord DynFlags.LlvmTarget
-deriving instance Ord Extension
+deriving instance Ord LE.Extension
 deriving instance Eq LlvmTarget
 #endif
